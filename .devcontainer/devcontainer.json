@@ -19,7 +19,8 @@
 		"vscode": {
 			"extensions": [
 				"PKief.material-icon-theme",
-				"ritwickdey.LiveServer"
+				"ritwickdey.LiveServer",
+				"ms-vscode.cpptools-extension-pack"
 			],
 			"settings": {
 				"editor.tabSize": 2,
