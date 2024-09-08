@@ -1,0 +1,217 @@
+<!-- Objects -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rock Paper Scissors (DOM)</title>
+  <style>
+    body {
+      background: #2e2e2e;
+      color: white;
+      font-size: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2em;
+    }
+
+    .btn-container {
+      width: 12.5em;
+      height: 12.5em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100%;
+      border: 5px solid white;
+    }
+
+    .emoji-style {
+      font-size: 5em;
+      cursor: pointer;
+      background: none;
+      border: none;
+      border-radius: 100%;
+    }
+
+    .result,
+    .display-moves,
+    .scores,
+    .rest-btn {
+      padding-bottom: 20px;
+    }
+
+    .result {
+      font-size: 1.5em;
+      font-weight: bold;
+      padding-top: 20px;
+    }
+
+    .display-moves {
+      font-size: 1.2em;
+    }
+
+    .rest-btn {
+      background: white;
+      font-size: 1.2em;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Rock Paper Scissors</h1>
+  <!-- 
+    // rock image Link
+    https://supersimple.dev/projects/rock-paper-scissors/images/rock-emoji.png
+    
+    // paper image link
+   https://supersimple.dev/projects/rock-paper-scissors/images/paper-emoji.png
+
+    // scissors image link
+    https://supersimple.dev/projects/rock-paper-scissors/images/scissors-emoji.png
+    -->
+
+  <div class="wrapper">
+    <div class="btn-container">
+      <button onclick="playGame('rock');" class="emoji-style">✊</button>
+    </div>
+    <div class="btn-container">
+      <button onclick="playGame('paper');" class="emoji-style">🤚</button>
+    </div>
+    <div class="btn-container">
+      <button onclick="playGame('scissors');" class="emoji-style">✌️</button>
+    </div>
+  </div>
+
+  <!-- printing the result -->
+  <h2 class="js-result result"></h2>
+  <p class="js-moves display-moves"></p>
+  <p class="js-score scores"></p>
+
+  <button onclick="resetScore();" class="rest-btn">Reset Scores</button>
+  <!-- JS Script -->
+  <script type="text/javascript">
+    let score = JSON.parse(localStorage.getItem("score")) || {
+      win: 0,
+      lose: 0,
+      tie: 0,
+    };
+
+    showScore();
+
+    function playGame(userMove) {
+      const computerMove = pickComputerMove();
+      let result = "";
+
+      // if computer pic rock
+      if (computerMove === "rock") {
+        if (userMove === "paper") {
+          result = "You Win";
+          score.win++;
+        } else if (userMove === "scissors") {
+          result = "You lose";
+          score.lose++;
+        } else if (userMove === "rock") {
+          result = "Tie";
+          score.tie++;
+        }
+      }
+      // if computer pick paper
+      else if (computerMove === "paper") {
+        if (userMove === "scissors") {
+          result = "You Win";
+          score.win++;
+        } else if (userMove === "rock") {
+          result = "You Lose";
+          score.lose++;
+        } else if (userMove === "paper") {
+          result = "Tie";
+          score.tie++;
+        }
+      }
+      // if computer pick scissors
+      else if (computerMove === "scissors") {
+        if (userMove === "rock") {
+          result = "You Win";
+          score.win++;
+        } else if (userMove === "paper") {
+          result = "You Lose";
+          score.lose++;
+        } else if (userMove === "scissors") {
+          result = "Tie";
+          score.tie++;
+        }
+      }
+
+      document.querySelector(".js-result").innerHTML = result;
+
+      showMoves(userMove, computerMove);
+
+      // store scores localStorage
+      localStorage.setItem("score", JSON.stringify(score));
+      showScore();
+    }
+
+    function showMoves(userMove, computerMove) {
+
+      const userEmoji = assignEmoji(userMove);
+
+      const computerEmoji = assignEmoji(computerMove);
+
+
+      document.querySelector(
+        ".js-moves"
+      ).innerHTML = `Your Pick: ${userEmoji},  Computer Pick: ${computerEmoji}`;
+    }
+
+    function assignEmoji(move) {
+      if (move === 'rock')
+        return '✊';
+      else if (move === 'paper')
+        return '🤚';
+      else if (move === 'scissors')
+        return '✌️';
+    }
+
+    function pickComputerMove() {
+      /*
+          choices for computer
+          for 0 to 1/3 	=> Rock
+          for 1/3 to 2/3 	=> Paper
+          for 2/3 to 1	=> Scissors
+        */
+      let computerMove = Math.random();
+
+      if (computerMove >= 0 && computerMove < 1 / 3) return "rock";
+      else if (computerMove > 1 / 3 && computerMove < 2 / 3) return "paper";
+      else return "scissors";
+    }
+
+    function showScore() {
+      document.querySelector(
+        ".js-score"
+      ).innerHTML = `Wins: ${score.win}, Loses: ${score.lose}, Ties: ${score.tie}`;
+    }
+
+    function resetScore() {
+      localStorage.removeItem("score");
+      score = { win: 0, lose: 0, tie: 0 };
+
+      // document.querySelector(
+      //   ".js-score"
+      // ).innerHTML = `Wins: ${score.win}, Loses: ${score.lose}, Ties: ${score.tie}`;
+
+      showScore();
+    }
+  </script>
+</body>
+
+</html>
